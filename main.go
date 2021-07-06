@@ -1,12 +1,12 @@
-// Programa detecta o mimetype de um arquivo usando uma lib escrita em go que faz a detecção sem usar libs externas.
-// A detecção é feita pelo que é chamado de magic numbers.
-// Esses números mágicos são definidos nos primeiros bytes do arquivo.
-// No link https://www.garykessler.net/library/file_sigs.html temos uma documentação como vários desses bytes mágicos
+// Program detects the mimetype of a file using a lib written in go which does the detection without using external libs.
+// Detection is done by what are called magic numbers.
+// These magic numbers are defined in the first bytes of the file.
+// At the link https://www.garykessler.net/library/file_sigs.html we have documentation on several of these magic bytes
 //
-// Exemplo para detecção de PDF
-// no link acima faça a busca: 25 50 44 46
+// Example for PDF detection
+// on the link above do the search: 25 50 44 46
 //
-// no código a implementação ficou assim:
+// in the code the implementation looked like this:
 //
 // func Pdf(in []byte) bool {
 // 		return len(in) > 4 && bytes.Equal(in[:4], []byte{0x25, 0x50, 0x44, 0x46})
@@ -22,17 +22,20 @@ import (
 	"strings"
 )
 
-type Result struct {
+type ok struct {
 	Mime 		string 	`json:"mime"`
 	Extension 	string 	`json:"extension"`
+}
+
+type fail struct {
 	Error 		string 	`json:"error"`
 }
 
-func printJson(result Result) {
+func printJson(result interface{}) {
 	j, err := json.Marshal(result)
 
 	if err != nil {
-		panic("Problemas com json")
+		panic("json error")
 	}
 
 	fmt.Print(string(j))
@@ -40,7 +43,7 @@ func printJson(result Result) {
 
 func main() {
 	var file string
-	flag.StringVar(&file,"file", "", "informar o nome do arquivo")
+	flag.StringVar(&file,"file", "", "type filename")
 	flag.Parse()
 
 	if strings.TrimSpace(file) == "" {
@@ -48,14 +51,14 @@ func main() {
 		return
 	}
 
-	mime, extension, err := mimetype.DetectFile(file)
+	mime, err := mimetype.DetectFile(file)
 
 	if err != nil {
-		r := Result{Error: err.Error()}
+		r := fail{Error: err.Error()}
 		printJson(r)
 		return
 	}
 
-	r := Result{Mime: mime, Extension: extension}
+	r := ok{Mime:mime.String(), Extension: mime.Extension()}
 	printJson(r)
 }

@@ -1,4 +1,9 @@
-# github.com/gabriel-vasile/mimetype v0.3.14
+# github.com/gabriel-vasile/mimetype v1.3.1
+## explicit
 github.com/gabriel-vasile/mimetype
-github.com/gabriel-vasile/mimetype/internal/matchers
+github.com/gabriel-vasile/mimetype/internal/charset
 github.com/gabriel-vasile/mimetype/internal/json
+github.com/gabriel-vasile/mimetype/internal/magic
+# golang.org/x/net v0.0.0-20210505024714-0287a6fb4125
+golang.org/x/net/html
+golang.org/x/net/html/atom
