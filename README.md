@@ -3,7 +3,7 @@
 # go-mimetype-cli
 Cli to project github.com/gabriel-vasile/mimetype
 
-# Usage
+## Usage
 
 ```bash
 >> go-mimetype-cli.exe -file README.md`
