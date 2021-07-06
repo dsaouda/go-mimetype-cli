@@ -23,12 +23,12 @@ import (
 )
 
 type ok struct {
-	Mime 		string 	`json:"mime"`
-	Extension 	string 	`json:"extension"`
+	Mime      string `json:"mime"`
+	Extension string `json:"extension"`
 }
 
 type fail struct {
-	Error 		string 	`json:"error"`
+	Error string `json:"error"`
 }
 
 func printJson(result interface{}) {
@@ -43,7 +43,7 @@ func printJson(result interface{}) {
 
 func main() {
 	var file string
-	flag.StringVar(&file,"file", "", "type filename")
+	flag.StringVar(&file, "file", "", "type filename")
 	flag.Parse()
 
 	if strings.TrimSpace(file) == "" {
@@ -59,6 +59,6 @@ func main() {
 		return
 	}
 
-	r := ok{Mime:mime.String(), Extension: mime.Extension()}
+	r := ok{Mime: mime.String(), Extension: mime.Extension()}
 	printJson(r)
 }
