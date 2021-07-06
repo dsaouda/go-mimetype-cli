@@ -1,4 +1,4 @@
-package matchers
+package magic
 
 import (
 	"bytes"
@@ -7,17 +7,17 @@ import (
 )
 
 // Csv matches a comma-separated values file.
-func Csv(in []byte) bool {
-	return sv(in, ',')
+func Csv(raw []byte, limit uint32) bool {
+	return sv(raw, ',')
 }
 
 // Tsv matches a tab-separated values file.
-func Tsv(in []byte) bool {
-	return sv(in, '\t')
+func Tsv(raw []byte, limit uint32) bool {
+	return sv(raw, '\t')
 }
 
 func sv(in []byte, comma rune) bool {
-	r := csv.NewReader(butLastLineReader(in, ReadLimit))
+	r := csv.NewReader(butLastLineReader(in, len(in)))
 	r.Comma = comma
 	r.TrimLeadingSpace = true
 	r.LazyQuotes = true
@@ -28,8 +28,8 @@ func sv(in []byte, comma rune) bool {
 }
 
 // butLastLineReader returns a reader to the provided byte slice.
-// the reader is guaranteed to reach EOF before it reads `cutAt` bytes.
-// bytes after the last newline are dropped from the input.
+// The reader is guaranteed to reach EOF before it reads `cutAt` bytes.
+// Bytes after the last newline are dropped from the input.
 func butLastLineReader(in []byte, cutAt int) io.Reader {
 	if len(in) >= cutAt {
 		for i := cutAt - 1; i > 0; i-- {
